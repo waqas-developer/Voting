@@ -1,1 +1,5 @@
 *.pyc
+settings/.env
+*.pyc
+votingBooth/__pycache__/utils.cpython-310.pyc
+votingBooth/__pycache__/views.cpython-310.pyc

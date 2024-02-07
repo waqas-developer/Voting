@@ -14,6 +14,7 @@ class GetSlip(View):
         guardian = request.GET.get("guardian", "")
         block_code = request.GET.get("block_code", "")
         voter_number = request.GET.get("series_number", "")
+        house_number = request.GET.get("house_number", "")
         pp = request.GET.get("provincial_constituency_number", "")
         na = request.GET.get("constituency_number", "")
         booth_number = request.GET.get("pollingStation_name", "")
@@ -32,6 +33,7 @@ class GetSlip(View):
             "pp": pp,
             "na": na,
             "booth_number": booth_number,
+            "house_number":house_number
         }
       
         return render(request, self.template_name, context)

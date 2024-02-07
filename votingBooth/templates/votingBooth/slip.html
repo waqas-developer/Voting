@@ -14,6 +14,13 @@
   </head>
   <body>
     <div class="container">
+      <div id="img" style="display: flex; justify-content: center; height: 200px">
+        <img src="{% static 'imgs/imrankhan.jpg' %}" style="height: 100%" />
+        <img
+          width="400px"
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Flag_of_the_Pakistan_Tehreek-e-Insaf.svg/2560px-Flag_of_the_Pakistan_Tehreek-e-Insaf.svg.png"
+        />
+      </div>
       <div id="input-text">
         <div style="display: flex; gap: 10px">
           <div>
@@ -75,6 +82,11 @@
               <input class="form-value" value="{{block_code}}" />
               <div class="form-title">شماریاتی بلاک کوڈ نمبر</div>
             </div>
+            <div class="form-col" style="margin-right: 20px">
+              <input class="form-value" value="{{house_number}}" />
+              <div class="form-title">گھرانہ نمبر</div>
+            </div>
+
             <div class="form-col">
               <input class="form-value" value="{{voter_number}}" />
               <div class="form-title">سلسلہ نمبر(ووٹ نمبر</div>
