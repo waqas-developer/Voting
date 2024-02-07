@@ -7,11 +7,10 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/slip.css' %}" />
     <style>
       @font-face {
-        font-family: "YourCustomFont";
         src: url("{% static 'fonts/nafees-regular.ttf' %}") format("truetype");
       }
     </style>
-    <title>Voting Boot</title>
+    <title>Election 24 Voting Slip Generator</title>
   </head>
   <body>
     <div class="container">
@@ -119,13 +118,18 @@
     function handlesubmit() {
       const voter_name = document.getElementById("voter_name").value;
       const guardian = document.getElementById("guardian").value;
+      const message = document.getElementById("message_text").value;
 
-      if (!voter_name) {
+      if (!message) {
         alert("Voter Name is required");
         return;
       }
+      if (!voter_name) {
+        alert("Voter name is required");
+        return;
+      }
       if (!guardian) {
-        alert("Guardian Name is required");
+        alert("ولدیت/زوجیت name is required");
         return;
       }
 
@@ -146,9 +150,9 @@
       const dataToSend = {
         cnic: "",
         voter_name: "",
-        block_code: "Munir Ahmed",
-        series_number: "443",
-        voter_number: "111",
+        block_code: "",
+        series_number: "",
+        voter_number: "",
         house_number: "",
         constituency_number: "",
         provincial_constituency_number: "",
