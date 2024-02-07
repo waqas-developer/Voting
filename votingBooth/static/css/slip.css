@@ -1,0 +1,53 @@
+@page {
+  size: A4;
+  margin: 0;
+}
+body {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.6;
+  background-color: #ffffff;
+  font-family: "YourCustomFont", Arial, sans-serif;
+}
+
+.container {
+  width: 100%;
+  max-width: 800px; /* Adjust as needed */
+  margin: 0 auto;
+  padding: 20px;
+}
+.title {
+  margin-top: -5px;
+  text-align: center;
+  text-decoration: underline;
+  font-family: "Times New Roman", Times, serif;
+}
+.slip-border {
+  border: 3px solid black;
+  border-radius: 30px;
+  padding: 30px 50px;
+}
+.slip-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.form-row {
+  display: flex;
+  width: 100%;
+}
+.form-col {
+  display: flex;
+  width: 100%;
+}
+.form-title {
+  font-weight: bold;
+  margin-left: 10px;
+}
+.form-value {
+  flex-grow: 1;
+  text-align: right;
+  border: none;
+  font-weight: 500;
+  border-bottom: 2px solid black;
+}

@@ -1,0 +1,270 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/slip.css' %}" />
+    <style>
+      @font-face {
+        font-family: "YourCustomFont";
+        src: url("{% static 'fonts/nafees-regular.ttf' %}") format("truetype");
+      }
+    </style>
+    <title>Voting Boot</title>
+  </head>
+  <body>
+    <div class="container">
+      <div id="input-text">
+        <div style="display: flex; gap: 10px">
+          <div>
+            <label for="voter_name">نام ووٹر</label>
+            <br />
+            <input
+              style="
+                width: 300px;
+                height: 30px;
+                margin-bottom: 10px;
+                border-radius: 10px;
+              "
+              id="voter_name"
+              placeholder="Voter name"
+            />
+          </div>
+          <div>
+            <label for="guardian">ولدیت/زوجیت</label>
+            <br />
+            <input
+              style="
+                width: 300px;
+                height: 30px;
+                margin-bottom: 10px;
+                border-radius: 10px;
+              "
+              id="guardian"
+              placeholder="Guardian name"
+            />
+          </div>
+        </div>
+
+        <textarea
+          style="
+            width: 100%;
+            min-height: 200px;
+            min-width: 100px;
+            border-radius: 10px;
+          "
+          id="message_text"
+          placeholder="Past the message from 8300.."
+        ></textarea>
+        <br />
+        <button onclick="handlesubmit()">Click to check</button>
+      </div>
+      {% if guardian %}
+      <div id="slip" class="slip-border">
+        <h3 class="title">Voting Slip for Election-2024</h3>
+        <section class="slip-form">
+          <div class="form-row">
+            <div class="form-col" style="margin-right: 20px">
+              <input class="form-value" value="{{guardian}}" />
+              <div class="form-title">ولدیت/زوجیت</div>
+            </div>
+            <div class="form-col">
+              <input class="form-value" value="{{voter_name}}" />
+              <div class="form-title">نام ووٹر</div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-col" style="margin-right: 20px">
+              <input class="form-value" value="{{block_code}}" />
+              <div class="form-title">شماریاتی بلاک کوڈ نمبر</div>
+            </div>
+            <div class="form-col">
+              <input class="form-value" value="{{voter_number}}" />
+              <div class="form-title">سلسلہ نمبر(ووٹ نمبر</div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-col" style="margin-right: 20px">
+              <input class="form-value" value="{{pp}}" />
+              <div class="form-title">(PP)صوبائی اسمبلی کا حلقہ</div>
+            </div>
+            <div class="form-col">
+              <input class="form-value" value="{{na}}" />
+              <div class="form-title">(NA)قومی اسمبلی کا حلقہ</div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-col">
+              <input class="form-value" value="{{booth_number}}" />
+              <div class="form-title">پولنگ اسٹیشن کا نام</div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <button
+        id="hide_button"
+        style="margin-top: 10px"
+        onclick="captureScreenshot()"
+      >
+        Take Screenshot
+      </button>
+      {% endif %}
+    </div>
+  </body>
+  <script>
+    function handlesubmit() {
+      const voter_name = document.getElementById("voter_name").value;
+      const guardian = document.getElementById("guardian").value;
+      if (!voter_name) {
+        alert("Voter Name is required");
+        return;
+      }
+      if (!guardian) {
+        alert("guardian Name is required");
+        return;
+      }
+      const dataToSend = {
+        ...GetInfo(),
+        voter_name: voter_name,
+        guardian: guardian,
+      };
+
+      const params = new URLSearchParams(dataToSend);
+      window.location.href = "/?" + params.toString();
+    }
+    function captureScreenshot() {
+      document.getElementById("hide_button").hidden = true;
+      document.getElementById("input-text").hidden = true;
+      print();
+      document.getElementById("hide_button").hidden = false;
+      document.getElementById("input-text").hidden = false;
+    }
+
+    function GetInfo() {
+      const dataToSend = {
+        cnic: "",
+        voter_name: "",
+        block_code: "Munir Ahmed",
+        series_number: "443",
+        voter_number: "111",
+        house_number: "",
+        constituency_number: "",
+        provincial_constituency_number: "",
+        pollingStation_name: "",
+      };
+      const text = document.getElementById("message_text").value;
+
+      const getCNIC = () => {
+        const cnicPattern = /\b\d{5}-\d{7}-\d\b/;
+        const cnicMatch = text.match(cnicPattern);
+
+        if (cnicMatch) {
+          const cnicNumber = cnicMatch[0];
+          dataToSend.cnic = cnicNumber;
+          console.log("CNIC Number:", cnicNumber);
+        } else {
+          console.log("CNIC Number not found in the text.");
+        }
+      };
+
+      getCNIC();
+      const getRegisterNumber = () => {
+        const blockCodePattern = /شماریاتی بلاک کوڈ: (\d+)/;
+        const blockCodeMatch = text.match(blockCodePattern);
+
+        if (blockCodeMatch) {
+          const blockCode = blockCodeMatch[1];
+          dataToSend.block_code = blockCodeMatch;
+          console.log("شماریاتی بلاک کوڈ:", blockCode);
+        } else {
+          console.log("شماریاتی بلاک کوڈ not found in the text.");
+        }
+      };
+
+      getRegisterNumber();
+
+      const getSeriesNumberMatch = () => {
+        const seriesNumberPattern = /سلسلہ نمبر: (\d+)/;
+        const seriesNumberMatch = text.match(seriesNumberPattern);
+
+        if (seriesNumberMatch) {
+          const seriesNumber = seriesNumberMatch[1];
+          dataToSend.series_number = seriesNumber;
+          console.log("سلسلہ نمبر:", seriesNumber);
+        } else {
+          console.log("سلسلہ نمبر not found in the text.");
+        }
+      };
+
+      getSeriesNumberMatch();
+      const getHouseNumber = () => {
+        const houseNumberPattern = /گھرانہ نمبر: (\d+)/;
+        const houseNumberMatch = text.match(houseNumberPattern);
+
+        if (houseNumberMatch) {
+          const houseNumber = houseNumberMatch[1];
+          dataToSend.house_number = houseNumber;
+          console.log("گھرانہ نمبر:", houseNumber);
+        } else {
+          console.log("گھرانہ نمبر not found in the text.");
+        }
+      };
+
+      getHouseNumber();
+      const getConstituencyNumber = () => {
+        const constituencyNumberPattern = /قومی اسمبلی حلقہ نمبر: (\d+)/;
+        const constituencyNumberMatch = text.match(constituencyNumberPattern);
+
+        if (constituencyNumberMatch) {
+          const constituencyNumber = constituencyNumberMatch[1];
+          dataToSend.constituency_number = constituencyNumber;
+          console.log("قومی اسمبلی حلقہ نمبر:", constituencyNumber);
+        } else {
+          console.log("قومی اسمبلی حلقہ نمبر not found in the text.");
+        }
+      };
+
+      getConstituencyNumber();
+
+      const getProvincialConstituencyNumber = () => {
+        const provincialConstituencyNumberPattern =
+          /صوبائی اسمبلی حلقہ نمبر: (\d+)/;
+        const provincialConstituencyNumberMatch = text.match(
+          provincialConstituencyNumberPattern
+        );
+
+        if (provincialConstituencyNumberMatch) {
+          const provincialConstituencyNumber =
+            provincialConstituencyNumberMatch[1];
+          dataToSend.provincial_constituency_number =
+            provincialConstituencyNumber;
+          console.log("صوبائی اسمبلی حلقہ نمبر:", provincialConstituencyNumber);
+        } else {
+          console.log("صوبائی اسمبلی حلقہ نمبر not found in the text.");
+        }
+      };
+
+      getProvincialConstituencyNumber();
+
+      const getPollingStationName = () => {
+        const pollingStationPattern = /پولنگ اسٹیشن: (.+)/;
+        const pollingStationMatch = text.match(pollingStationPattern);
+
+        if (pollingStationMatch) {
+          const pollingStation = pollingStationMatch[1];
+          dataToSend.pollingStation_name = pollingStation;
+          console.log("پولنگ اسٹیشن:", pollingStation);
+        } else {
+          console.log("پولنگ اسٹیشن not found in the text.");
+        }
+      };
+
+      getPollingStationName();
+
+      document.getElementById("message_text").value = null;
+      return dataToSend;
+    }
+  </script>
+</html>
