@@ -1,6 +1,7 @@
 import openai
 import re
 import ast
+from django.conf import settings
 
 
 def GenerateGPTResponse(prompt):
@@ -9,11 +10,10 @@ def GenerateGPTResponse(prompt):
             if not prompt:
                 raise "Input text is required"
              
-
             # Call the OpenAI GPT-3 API
             client = openai.OpenAI(
                 # This is the default and can be omitted
-                api_key="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",
+                api_key=settings.API_KEY,
             )
             response = client.chat.completions.create(
                 messages=[
