@@ -22,13 +22,13 @@
             <br />
             <input
               style="
-                width: 300px;
+                width: 100%;
                 height: 30px;
                 margin-bottom: 10px;
                 border-radius: 10px;
               "
               id="voter_name"
-              placeholder="Voter name"
+              placeholder="نام ووٹر"
             />
           </div>
           <div>
@@ -36,29 +36,26 @@
             <br />
             <input
               style="
-                width: 300px;
+                width: 100%;
                 height: 30px;
                 margin-bottom: 10px;
                 border-radius: 10px;
               "
               id="guardian"
-              placeholder="Guardian name"
+              placeholder="ولدیت/زوجیت"
             />
           </div>
         </div>
 
         <textarea
-          style="
-            width: 100%;
-            min-height: 200px;
-            min-width: 100px;
-            border-radius: 10px;
-          "
+          style="width: 100%; min-height: 200px; border-radius: 10px"
           id="message_text"
           placeholder="Past the message from 8300.."
         ></textarea>
         <br />
-        <button onclick="handlesubmit()">Click to check</button>
+        <button class="button buttonprint" onclick="handlesubmit()">
+          Submit
+        </button>
       </div>
       {% if guardian %}
       <div id="slip" class="slip-border">
@@ -105,26 +102,33 @@
 
       <button
         id="hide_button"
+        class="button buttonprint"
         style="margin-top: 10px"
         onclick="captureScreenshot()"
       >
-        Take Screenshot
+        Print slip
       </button>
       {% endif %}
     </div>
   </body>
+  <script
+    type="text/javascript"
+    src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+  ></script>
   <script>
     function handlesubmit() {
       const voter_name = document.getElementById("voter_name").value;
       const guardian = document.getElementById("guardian").value;
+
       if (!voter_name) {
         alert("Voter Name is required");
         return;
       }
       if (!guardian) {
-        alert("guardian Name is required");
+        alert("Guardian Name is required");
         return;
       }
+
       const dataToSend = {
         ...GetInfo(),
         voter_name: voter_name,
@@ -135,11 +139,7 @@
       window.location.href = "/?" + params.toString();
     }
     function captureScreenshot() {
-      document.getElementById("hide_button").hidden = true;
-      document.getElementById("input-text").hidden = true;
       print();
-      document.getElementById("hide_button").hidden = false;
-      document.getElementById("input-text").hidden = false;
     }
 
     function GetInfo() {
@@ -176,7 +176,7 @@
 
         if (blockCodeMatch) {
           const blockCode = blockCodeMatch[1];
-          dataToSend.block_code = blockCodeMatch;
+          dataToSend.block_code = blockCode;
           console.log("شماریاتی بلاک کوڈ:", blockCode);
         } else {
           console.log("شماریاتی بلاک کوڈ not found in the text.");
