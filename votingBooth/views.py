@@ -18,8 +18,9 @@ class GetSlip(View):
         na = request.GET.get("constituency_number", "")
         booth_number = request.GET.get("pollingStation_name", "")
         prompt = f"convert my voter_name which is  {voter_name} and guardian name which is  {guardian} in urdu writing and return python dictionary format like" + "{'voter_name':'any','guardian':'any'} where the voter_name and guardian key must come  and  pls not more extra text."
-        response = GenerateGPTResponse(prompt)
-        voter_name ,guardian = getVotterandGardian(response)
+        if guardian:  
+            response = GenerateGPTResponse(prompt)
+            voter_name ,guardian = getVotterandGardian(response)
         context = {
             "voter_name": voter_name,
             "guardian": guardian,
